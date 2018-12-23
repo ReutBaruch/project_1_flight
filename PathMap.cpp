@@ -1,0 +1,21 @@
+#include "PathMap.h"
+
+/*
+bool PathMap::isKeyInMap(string key) const {
+    if (this->pathMap.count(key)) {
+        return true;
+    }
+    return false;
+}
+
+string PathMap::getBindMap(string key) const {
+    if (this->pathMap.count(key)) {
+        return this->pathMap.find(key)->second;
+    } else {
+        throw " Error - this key not map";
+    }
+}
+*/
+void PathMap::addBindToMap(string key, string value) {
+    this->pathMap.insert(pair<string,string> (key,value));
+}
