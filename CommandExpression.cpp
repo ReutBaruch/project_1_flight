@@ -1,49 +1,63 @@
 #include "CommandExpression.h"
 
 double CommandExpression::calculate(map<string, double> &assignment) {
-    int countSteps=0;
     string expression;
     int resultExpression;
+
     vector<string> newVector;
     Expression *newExpression;
     vector<string>::iterator tempItr;
     tempItr=this->vectorIt;
+
     CreateExpression *createExpression = new CreateExpression();
-    if (((*this->vectorIt) == "openDateServer") || ((*this->vectorIt) == "sleep")) {
+
+    int counter = 0;
+
+    if ((*vectorIt)=="var") {
+        vectorIt++;
+        counter++;
+        counter += this->command->execute(vectorIt);
+    } else if (((*this->vectorIt) == "openDateServer") || ((*this->vectorIt) == "sleep")) {
         this->vectorIt++;
-        countSteps++;
+        counter++;
         while ((*this->vectorIt) != ";") {
             expression = (*vectorIt);
             newExpression = createExpression->convertToExpression(expression);
             resultExpression = (int) newExpression->calculate(assignment);
             newVector.push_back(to_string(resultExpression));
             vectorIt++;
-            countSteps++;
+            counter++;
         }
         vector<string>::iterator itr;
+
         itr=newVector.begin();
-        this->command->doCommand(itr);
+        this->command->execute(itr);
+
     } else if((*vectorIt) == "connect"){
         vectorIt++;
-        countSteps++;
+        counter++;
+
         string ip = (*vectorIt);
         newVector.push_back(ip);
         vectorIt++;
-        countSteps++;
+        counter++;
+
         expression = (*vectorIt);
         newExpression = createExpression->convertToExpression(expression);
         resultExpression = (int) newExpression->calculate(assignment);
         newVector.push_back(to_string(resultExpression));
-        vector<string>::iterator itr;
-        itr=newVector.begin();
-        this->command->doCommand(itr);
+
+        vector<string>::iterator tempIt;
+        tempIt = newVector.begin();
+
+        this->command->execute(tempIt);
 
     } else if((*vectorIt) == "print"){
         vectorIt++;
-        countSteps++;
-        if((*vectorIt)[0]=='\"'){
+        counter++;
 
-            this->command->doCommand(vectorIt);
+        if((*vectorIt)[0]=='\"'){
+            this->command->execute(vectorIt);
         } else {
             while ((*this->vectorIt) != ";") {
                 expression = (*vectorIt);
@@ -51,38 +65,33 @@ double CommandExpression::calculate(map<string, double> &assignment) {
                 resultExpression = (int) newExpression->calculate(assignment);
                 newVector.push_back(to_string(resultExpression));
                 vectorIt++;
-                countSteps++;
+                counter++;
             }
             vector<string>::iterator itr;
             itr=newVector.begin();
-            this->command->doCommand(itr);
+            this->command->execute(itr);
         }
-
-    } else if ((*vectorIt)=="var"){
-        vectorIt++;
-        countSteps++;
-        countSteps+=this->command->doCommand(vectorIt);
     } else {
         newVector.push_back(*this->vectorIt);
         string expressin = "";
 
         this->vectorIt += 2;
-        countSteps += 2;
+        counter += 2;
         while ((*this->vectorIt) != ";") {
             expressin += (*this->vectorIt);
             this->vectorIt++;
-            countSteps++;
+            counter++;
         }
         newExpression = createExpression->convertToExpression(expressin);
         double result = newExpression->calculate(assignment);
-        //newVector.push_back("=");
         newVector.push_back(to_string(result));
         vector<string>::iterator newVectorIt;
         newVectorIt = newVector.begin();
-        this->command->doCommand(newVectorIt);
+        this->command->execute(newVectorIt);
     }
     this->vectorIt=tempItr;
-    return countSteps;
+    delete createExpression;
+    return counter;
 }
 
 double CommandExpression::calculate() {

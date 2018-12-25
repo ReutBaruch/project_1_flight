@@ -16,7 +16,9 @@ public:
         return this->isConnected;
     }
 
+    ~CheckConnection(){
+        delete this;
+    }
 };
-
 
 #endif //PROJECT1_CHECKCONNECTION_H

@@ -1,7 +1,7 @@
 #include "PathMap.h"
 
 /*
-bool PathMap::isKeyInMap(string key) const {
+bool PathMap::isInMap(string key) const {
     if (this->pathMap.count(key)) {
         return true;
     }

@@ -56,7 +56,7 @@ int main() {
          openServerCommand.doCommand("5400 10");
 
          ConnectCommand connectCommand;
-         connectCommand.doCommand("127.0.0.1 5400");
+         connectCommand.execute("127.0.0.1 5400");
 
          std::cout << "Hello, World!" << std::endl;*/
     /*string s="3+(4/2)*5";

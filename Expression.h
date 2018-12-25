@@ -1,10 +1,11 @@
-
-
 #include <map>
 #include <string>
+
 using namespace std;
+
 #ifndef PROJECT1_EXPRESSION_H
 #define PROJECT1_EXPRESSION_H
+
 class Expression {
     /**
      * @param assignment evaluate the expression using in this assignment

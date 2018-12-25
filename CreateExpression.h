@@ -14,9 +14,9 @@ using namespace std;
 
 class CreateExpression {
 public:
-    CreateExpression();
-    Expression* convertToExpression(string str);
-
+    CreateExpression() {}
+    Expression* convertToExpression(string string1);
+    ~CreateExpression(){}
 };
 
 

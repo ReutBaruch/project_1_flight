@@ -1,7 +1,7 @@
 #include "LoopCommand.h"
 
 
-int LoopCommand::doCommand(vector<string>::iterator &script) {
+int LoopCommand::execute(vector<string>::iterator &vectorIt) {
     list<CommandExpression*> tempList;
     while (this->boolExpression->calculateBool(
             this->symbolTable->getSymbols())) {

@@ -11,9 +11,10 @@ parser::parser(){
     this->valueMap = new FlightValueMap();
     this->bindMap = new PathMap();
     this->symbols = new SymbolTable(this->valueMap, this->bindMap);
+    this->toExit = new ExitServer();
     this->commands=new CommandMap();
-    this->commands->addCommand("openDateServer", new OpenServerCommand(this->connection, this->valueMap ));
-    this->commands->addCommand("connect", new ConnectCommand(this->connection,this->stringControl));
+    this->commands->addCommand("openDateServer", new OpenServerCommand(this->connection, this->valueMap, this->toExit));
+    this->commands->addCommand("connect", new ConnectCommand(this->connection,this->stringControl, this->toExit));
     this->commands->addCommand("var", new VarCommand(this->symbols));
     this->commands->addCommand("control", new SetControlCommand(
             this->stringControl, this->symbols));
@@ -35,14 +36,15 @@ void parser::runParser(vector<string> v) {
             vectorIt += commandExpression->calculate(symbolsMap);
         } else if (((*vectorIt) == "if") || ((*vectorIt) == "while")) {
             newCommand = this->commands->getCommand(*vectorIt);
-            newCommand->doCommand(vectorIt);
-        } else if (this->commands->isKeyInMap(*vectorIt)) {
+            newCommand->execute(vectorIt);
+        } else if (this->commands->isInMap(*vectorIt)) {
             commandExpression = new CommandExpression(vectorIt, this->commands->getCommand(*vectorIt));
             vectorIt += commandExpression->calculate(symbolsMap);
         }
     }
-    while (true) {
-        int x;
+    while(!this->connection->getConnect()){
+        sleep(1);
     }
+    this->toExit->setExit(false);
 }
 

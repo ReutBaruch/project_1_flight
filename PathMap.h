@@ -14,7 +14,7 @@ public:
         this->pathMap.insert(pair<string,string> (key,value));
     }
     //string getBindMap(string key) const;
-    //bool isKeyInMap(string key) const;
+    //bool isInMap(string key) const;
     map<string,string> getBindMap(){
         return this->pathMap;
     }

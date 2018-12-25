@@ -5,12 +5,13 @@ struct socketArgs {
     int listenTime;
     CheckConnection* flag;
     FlightValueMap* valuesMap;
+    ExitServer* exitServer;
 };
 
-OpenServerCommand::OpenServerCommand(CheckConnection* check, FlightValueMap* values) {
+OpenServerCommand::OpenServerCommand(CheckConnection* check, FlightValueMap* values, ExitServer* exit) {
     this->isConnected = check;
     this->valueMap = values;
-
+    this->toExit = exit;
 }
 
 void* openSocket(void* args) {
@@ -57,7 +58,7 @@ void* openSocket(void* args) {
     arg->flag->setConnect(true);
 
     /* If connection is established then start communicating */
-    while(true) {
+    while(arg->exitServer) {
         bzero(buffer,256);
         n = read(newsockfd, buffer, 255);
         string updateMap = buffer;
@@ -71,17 +72,9 @@ void* openSocket(void* args) {
         sleep(arg->listenTime);
     }
 
-
-    /* Write a response to the client */
-    n = write(newsockfd,"I got your message",18);
-
-    if (n < 0) {
-        perror("ERROR writing to socket");
-        exit(1);
-    }
 }
 
-int OpenServerCommand::doCommand(vector<string>::iterator &vectorIt) {
+int OpenServerCommand::execute(vector<string>::iterator &vectorIt) {
     int port,time;
     port = stoi(*vectorIt);
     vectorIt++;
@@ -91,6 +84,7 @@ int OpenServerCommand::doCommand(vector<string>::iterator &vectorIt) {
     arg->listenTime = time;
     arg->flag = this->isConnected;
     arg->valuesMap = this->valueMap;
+    arg->exitServer = this->toExit;
     pthread_t pthread;
     pthread_create(&pthread, nullptr, openSocket, arg);
     pthread_detach(pthread);

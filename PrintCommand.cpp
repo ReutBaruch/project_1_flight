@@ -1,17 +1,18 @@
 #include "PrintCommand.h"
 
-int PrintCommand::doCommand(vector<string>::iterator &vectorIt) {
-    string printString = "";
-    if ((*vectorIt)[0] == '\"') {
+int PrintCommand::execute(vector<string>::iterator &vectorIt) {
+    string toPrint = "";
+    if((*vectorIt)[0] != '\"'){
+        toPrint = (*vectorIt);
+    } else {
         while ((*vectorIt) != ";") {
-            printString += (*vectorIt);
+            toPrint += (*vectorIt);
             vectorIt++;
         }
-        printString=printString.substr(1, printString.length() - 2);
-    } else {
-        printString = (*vectorIt);
+        toPrint = toPrint.substr(1, (toPrint.length() / 2) - 2);
     }
-    cout << printString << endl;
     vectorIt++;
+
+    cout << toPrint << endl;
     return 0;
 }

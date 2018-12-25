@@ -11,12 +11,17 @@ using namespace std;
 class FlightValueMap {
     map<string,double> mapOfFlightValue;
 public:
-    FlightValueMap();
+    FlightValueMap() {
+        this->initalize();
+    }
+
     void initalize();
     void updateMap(string values);
     map<string,double> getFlightVauleMap();
-    //double getValue(string key);
-    //bool isKeyInMap(string key) const;
+    ~FlightValueMap(){
+        delete this;
+    }
+
 
 };
 

@@ -17,7 +17,10 @@ public:
         this->boolExpression = boolExpres;
         this->symbolTable=symbolTable;
     }
-    virtual int doCommand(vector<string>::iterator &vectorIt);
+    virtual int execute(vector<string>::iterator &vectorIt);
+    ~IfCommand(){
+        delete this;
+    }
 
 };
 

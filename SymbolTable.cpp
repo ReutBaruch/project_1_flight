@@ -3,14 +3,18 @@
 
 void SymbolTable::addPairSymbol(string key, string value) {
     this->bindMap->addToPathMap(key, value);
-    if (this->flightValues->getFlightVauleMap().count(key)) {
+    if (this->flightValues->getFlightVauleMap().count(value)) {
         this->symbols.insert(pair<string, double>(key, this->flightValues->getFlightVauleMap()
         .find(value)->second));
-    } else {
+        this->bindMap->addToPathMap(key, value);
+    } else if(this->symbols.count(value)) {
         double tempValue = this->getValue(value);
         this->symbols.insert(pair<string, double>(key,tempValue));
         this->bindedSymbols.insert(pair<string, string>(key, value));
         this->bindedSymbols.insert(pair<string, string>(value, key));
+    } else {
+        this->symbols.insert(pair<string, double>(key, 0));
+        this->bindMap->addToPathMap(key, value);
     }
 }
 

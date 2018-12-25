@@ -1,109 +1,108 @@
 #include "CreateExpression.h"
 
-CreateExpression::CreateExpression() {
-
-}
-
 // shunting yard
-Expression *CreateExpression::convertToExpression(string str) {
-    string oprtatorList = "";
-    stack<Expression *> expressions;
+Expression *CreateExpression::convertToExpression(string string1) {
+
+    string operatorString = "";
     stack<string> operators;
+    stack<Expression *> expressions;
+
     int stringLength = 0;
     int resultLength = 0;
-    while (stringLength < str.length()) {
-        if (str[stringLength] == '(') {
+
+    while (stringLength < string1.length()) {
+        if (string1[stringLength] == '(') {
             operators.push("(");
-        } else if (str[stringLength] == ')') {
+        } else if (string1[stringLength] == ')') {
             string temp;
             while (operators.top() != "(") {
                 temp = operators.top();
-                oprtatorList += temp;
+                operatorString += temp;
                 operators.pop();
             }
             operators.pop();
-        } else if (str[stringLength] != '+' && str[stringLength] != '-' &&
-                   str[stringLength] != '*' && str[stringLength] != '/') {
+        } else if (string1[stringLength] != '+' && string1[stringLength] != '-' &&
+                   string1[stringLength] != '*' && string1[stringLength] != '/') {
 
-            oprtatorList += str[stringLength];
+            operatorString += string1[stringLength];
         } else {
             string operatorPush = "";
-            if ((stringLength == 0) && (str[stringLength] == '-')) {
+            if ((stringLength == 0) && (string1[stringLength] == '-')) {
                 operatorPush = "^";
             } else {
-                char previousChar = str[stringLength - 1];
-                char currentChar = str[stringLength];
+                char previousChar = string1[stringLength - 1];
+                char currentChar = string1[stringLength];
                 if ((currentChar == '-') &&
                     ((previousChar == '*') || (previousChar == '+') ||
                      (previousChar == '/') || (previousChar == '-'))) {
                     operatorPush = "^";
                 } else {
-                    operatorPush = string(1, str[stringLength]);
-                    oprtatorList +=",";
+                    operatorPush = string(1, string1[stringLength]);
+                    operatorString +=",";
 
                 }
 
             }
             operators.push(operatorPush);
-
-
         }
         stringLength++;
     }
+
     while (!operators.empty()) {
-        oprtatorList += operators.top();
+        operatorString += operators.top();
         operators.pop();
     }
-    while (resultLength < oprtatorList.length()) {
+
+    while (resultLength < operatorString.length()) {
         Expression *newExpression;
         Expression *rightExpression;
         Expression *leftExpression;
-        if (oprtatorList[resultLength] != ' ') {
-            if (oprtatorList[resultLength] == '+') {
+        if (operatorString[resultLength] != ' ') {
+            if (operatorString[resultLength] == '+') {
                 rightExpression = expressions.top();
                 expressions.pop();
                 leftExpression = expressions.top();
                 expressions.pop();
                 resultLength++;
                 newExpression = new Plus(leftExpression, rightExpression);
-            } else if (oprtatorList[resultLength] == '*') {
+            } else if (operatorString[resultLength] == '*') {
                 rightExpression = expressions.top();
                 expressions.pop();
                 leftExpression = expressions.top();
                 expressions.pop();
                 resultLength++;
                 newExpression = new Mul(leftExpression, rightExpression);
-            } else if (oprtatorList[resultLength] == '/') {
+            } else if (operatorString[resultLength] == '/') {
                 rightExpression = expressions.top();
                 expressions.pop();
                 leftExpression = expressions.top();
                 expressions.pop();
                 resultLength++;
                 newExpression = new Div(leftExpression, rightExpression);
-            } else if (oprtatorList[resultLength] == '-') {
+            } else if (operatorString[resultLength] == '-') {
                 rightExpression = expressions.top();
                 expressions.pop();
                 leftExpression = expressions.top();
                 expressions.pop();
                 newExpression = new Minus(leftExpression, rightExpression);
                 resultLength++;
-            } else if (oprtatorList[resultLength] == '^') {
+            } else if (operatorString[resultLength] == '^') {
                 newExpression = new Neg(expressions.top());
                 resultLength++;
-            } else if (isdigit(oprtatorList[resultLength])) {
+            } else if (isdigit(operatorString[resultLength])) {
                 string num = "";
-                while (((oprtatorList[resultLength]) != ',') && (isdigit(oprtatorList[resultLength]))) {
-                    string s = string(1, oprtatorList[resultLength]);
+                while (((operatorString[resultLength]) != ',') && (isdigit(operatorString[resultLength]))) {
+                    string s = string(1, operatorString[resultLength]);
                     num = num + s;
                     resultLength++;
                 }
                 double d = atof(num.c_str());
                 newExpression = new Num(d);
-            } else if (oprtatorList[resultLength] != ' ') {
+            } else if (operatorString[resultLength] != ' ') {
                 string tempVar = "";
-                while ((oprtatorList[resultLength] != ',') || (isdigit(oprtatorList[resultLength])) ||
-                       (isalpha(oprtatorList[resultLength]))) {
-                    string s = string(1, oprtatorList[resultLength]);
+                while (((operatorString[resultLength] != ',') || (isdigit(operatorString[resultLength])) ||
+                       (isalpha(operatorString[resultLength]))) && (resultLength < operatorString.length())){
+                    string s = string(1, operatorString[resultLength]);
                     tempVar = tempVar + s;
                     resultLength++;
                 }
@@ -111,14 +110,14 @@ Expression *CreateExpression::convertToExpression(string str) {
                 newExpression = new Var(tempVar);
             }
             expressions.push(newExpression);
-            Expression *e = expressions.top();
-            if(oprtatorList[resultLength] == ',') {
+            Expression* tempExp = expressions.top();
+            if(operatorString[resultLength] == ',') {
                 resultLength++;
             }
         } else {
             resultLength++;
         }
     }
-    return expressions.top();
 
+    return expressions.top();
 }

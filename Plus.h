@@ -7,20 +7,20 @@
 #define PROJECT1_PLUS_H
 
 
-class Plus : public Expression,public BinaryExpression {
+class Plus : public Expression,public BineryExpression {
 public:
-    Plus(Expression *leftArgument, Expression *rightArgument) : BinaryExpression(leftArgument, rightArgument
+    Plus(Expression *leftArgument, Expression *rightArgument) : BineryExpression(leftArgument, rightArgument
                                                                                  ) {
     }
 
-    Plus(double leftArgument, double rightArgument) : BinaryExpression(new Num(leftArgument), new Num(rightArgument)
+    Plus(double leftArgument, double rightArgument) : BineryExpression(new Num(leftArgument), new Num(rightArgument)
                                                                        ) {
     }
 
-    Plus(double leftArgument, Expression *rightArgument) : BinaryExpression(new Num(leftArgument), rightArgument
+    Plus(double leftArgument, Expression *rightArgument) : BineryExpression(new Num(leftArgument), rightArgument
                                                                             ) {
     }
-    Plus(Expression *leftArgument, double rightArgument) : BinaryExpression(leftArgument, new Num(rightArgument)
+    Plus(Expression *leftArgument, double rightArgument) : BineryExpression(leftArgument, new Num(rightArgument)
                                                                             ) {
     }
     virtual double calculate(map<string, double> &assignment) ;

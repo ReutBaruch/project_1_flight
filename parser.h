@@ -15,6 +15,7 @@
 #include "CommandMap.h"
 #include "ConditionParser.h"
 #include "SleepCommand.h"
+#include "ExitServer.h"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ class parser {
     FlightValueMap* valueMap;
     PathMap* bindMap;
     StringFlightControls* stringControl;
-
+    ExitServer* toExit;
 
 public:
     parser();

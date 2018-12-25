@@ -1,10 +1,6 @@
 
 #include "FlightValueMap.h"
 
-FlightValueMap::FlightValueMap() {
-    this->initalize();
-}
-
 void FlightValueMap::initalize() {
     this->mapOfFlightValue.insert(pair<string, double>(
             "/instrumentation/airspeed-indicator/indicated-speed-kt", 0));
@@ -83,7 +79,7 @@ double FlightValueMap::getValue(string key) {
     }
 }*/
 
-/*bool FlightValueMap::isKeyInMap(string key) const {
+/*bool FlightValueMap::isInMap(string key) const {
     if (this->mapOfFlightValue.count(key)) {
         return true;
     }

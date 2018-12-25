@@ -1,7 +1,7 @@
 #include "VarCommand.h"
 
 
-int VarCommand::doCommand(vector<string>::iterator &vectorIt){
+int VarCommand::execute(vector<string>::iterator &vectorIt){
     int countSteps=0;
     string varName = (*vectorIt);
     vectorIt += 2;

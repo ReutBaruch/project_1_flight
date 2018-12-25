@@ -12,12 +12,13 @@ using namespace std;
 class Command {
 public:
     map<string, double> symbolTable;
-    //std::map<string, Command*> commands;
 public:
     Command(){}
-    virtual int doCommand(vector<string>::iterator &vectorIt) = 0;
+    virtual int execute(vector<string>::iterator &vectorIt) = 0;
 
+    ~Command(){
+        delete this;
+    }
 };
-
 
 #endif //PROJECT1_COMMAND_H

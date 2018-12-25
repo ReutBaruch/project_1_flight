@@ -23,6 +23,9 @@ class lexer {
 public:
     lexer(string name);
     vector<string> lexerFile();
+    ~lexer(){
+        delete this;
+    }
 };
 
 

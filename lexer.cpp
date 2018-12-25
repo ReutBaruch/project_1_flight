@@ -1,5 +1,3 @@
-
-
 #include "lexer.h"
 
 lexer::lexer(string name){
@@ -9,23 +7,32 @@ lexer::lexer(string name){
 vector<string> lexer::lexerFile() {
     vector<string> buffer;
     string line;
-    char* toChar;
-    char* cut;
     ifstream lexFile;
+    string temp = "";
+
     lexFile.open(this->fileName, ios::in);
+
     if (lexFile.is_open()){
         while (getline(lexFile, line)){
-            toChar = const_cast <char *>(line.c_str());
-            cut = strtok(toChar, " ");
-            do{
-                buffer.push_back(cut);
-                cut = strtok(NULL, " ");
-            } while (cut != NULL);
-           buffer.push_back(";");
+            int index = 0;
+
+            while(line[index] != '\0'){
+                if((line[index] != ' ') && (line[index] != '\t')){
+                    temp += line[index];
+                } else {
+                    buffer.push_back(temp);
+                    temp = "";
+                }
+                index++;
+            }
+            buffer.push_back(temp);
+            temp = "";
+            buffer.push_back(";");
         }
         lexFile.close();
     } else {
-        throw "unable to open file.";
+        throw "Can't open file";
     }
+
     return buffer;
 }

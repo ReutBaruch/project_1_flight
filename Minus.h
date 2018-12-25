@@ -6,17 +6,17 @@
 #define PROJECT1_MINUS_H
 
 
-class Minus: public Expression, public BinaryExpression {
+class Minus: public Expression, public BineryExpression {
 public:
-    Minus(Expression *leftArgument, Expression *rightArgument) : BinaryExpression(leftArgument, rightArgument) {
+    Minus(Expression *leftArgument, Expression *rightArgument) : BineryExpression(leftArgument, rightArgument) {
     }
 
-    Minus(double leftArgument, double rightArgument) : BinaryExpression(new Num(leftArgument), new Num(rightArgument)) {
+    Minus(double leftArgument, double rightArgument) : BineryExpression(new Num(leftArgument), new Num(rightArgument)) {
     }
 
-    Minus(double leftArgument, Expression *rightArgument) : BinaryExpression(new Num(leftArgument), rightArgument) {
+    Minus(double leftArgument, Expression *rightArgument) : BineryExpression(new Num(leftArgument), rightArgument) {
     }
-    Minus(Expression *leftArgument, double rightArgument) : BinaryExpression(leftArgument, new Num(rightArgument)) {
+    Minus(Expression *leftArgument, double rightArgument) : BineryExpression(leftArgument, new Num(rightArgument)) {
     }
     virtual double calculate(map<string, double> &assignment) ;
 

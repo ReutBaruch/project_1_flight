@@ -1,33 +1,35 @@
 #include "BoolExpression.h"
 
-BoolExpression::BoolExpression(string stringCondition) {
-    this->createBoolExpression(stringCondition);
-}
+void BoolExpression::createBoolExpression(string conditionToCheck) {
 
-void BoolExpression::createBoolExpression(string boolCondition) {
-    CreateExpression *createExpression = new CreateExpression();
-    this->action = "";
+    CreateExpression* createExpression = new CreateExpression();
+
     string expression = "";
+    this->action = "";
     int strLen = 0;
-    while ((boolCondition[strLen] != '<') && (boolCondition[strLen] != '>') &&
-           (boolCondition[strLen] != '=') && (boolCondition[strLen] != '!')) {
-        expression += boolCondition[strLen];
+
+    while ((conditionToCheck[strLen] != '<') && (conditionToCheck[strLen] != '!') &&
+           (conditionToCheck[strLen] != '=') && (conditionToCheck[strLen] != '>')) {
+        expression += conditionToCheck[strLen];
         strLen++;
     }
+
     this->leftArgument = createExpression->convertToExpression(expression);
-    while ((boolCondition[strLen] == '<') || (boolCondition[strLen] == '>') ||
-           (boolCondition[strLen] == '=') || (boolCondition[strLen] == '!')) {
-        action += boolCondition[strLen];
+    while ((conditionToCheck[strLen] == '<') || (conditionToCheck[strLen] == '>') ||
+           (conditionToCheck[strLen] == '=') || (conditionToCheck[strLen] == '!')) {
+        action += conditionToCheck[strLen];
         strLen++;
     }
     expression = "";
-    while ((boolCondition[strLen] != '<') && (boolCondition[strLen] != '>') &&
-           (boolCondition[strLen] != '=') && (boolCondition[strLen] != '!') &&
-           (strLen < boolCondition.length())) {
-        expression += boolCondition[strLen];
+
+    while ((conditionToCheck[strLen] != '<') && (conditionToCheck[strLen] != '>') &&
+           (conditionToCheck[strLen] != '=') && (conditionToCheck[strLen] != '!') &&
+           (strLen < conditionToCheck.length())) {
+        expression += conditionToCheck[strLen];
         strLen++;
     }
     this->rightArgument = createExpression->convertToExpression(expression);
+    delete (createExpression);
 }
 
 bool BoolExpression::calculateBool(map<string, double> symbolMap) {
@@ -50,6 +52,10 @@ bool BoolExpression::calculateBool(map<string, double> symbolMap) {
         return ((leftArgument->calculate(symbolMap)) !=
                 rightArgument->calculate(symbolMap));
     } else {
-        throw "ERROR - invald argument";
+        throw "Invald argument";
     }
+}
+
+BoolExpression::~BoolExpression(){
+    delete this;
 }

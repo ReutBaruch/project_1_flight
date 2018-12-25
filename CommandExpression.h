@@ -15,9 +15,12 @@ public:
         this->vectorIt = it;
     }
 
+    double calculate();
     double calculate(map<string, double> &assignment);
 
-    double calculate();
+    ~CommandExpression(){
+        delete this;
+    }
 };
 
 

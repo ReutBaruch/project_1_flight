@@ -5,13 +5,14 @@ struct socketArgs {
     int port;
     CheckConnection* flag;
     StringFlightControls* controlString;
+    ExitServer* exitServer;
 };
 
-ConnectCommand::ConnectCommand(CheckConnection* check, StringFlightControls* flightStr) {
+ConnectCommand::ConnectCommand(CheckConnection* check, StringFlightControls* flightStr, ExitServer* exit) {
     this->isConnected = check;
     this->flightString = flightStr;
+    this->toExit = exit;
 }
-
 
 void* connectClient(void* args) {
 
@@ -53,35 +54,23 @@ void* connectClient(void* args) {
         exit(1);
     }
 
-    while (true) {
+    while (arg->exitServer) {
         bzero(buffer, 256);
         while(!arg->controlString->isEmpty()){
             strcpy(buffer, arg->controlString->getControl().c_str());
-            n = write(sockfd, buffer, 255);
-            if (n < 0) {
+
+            ssize_t ssize = write(sockfd, buffer, strlen(buffer));
+            if (ssize < 0) {
                 perror("ERROR writing to socket");
                 exit(1);
             }
-            //string initilize = "";
             arg->controlString->setControl("");
         }
     }
-
-
-    /* Now read server response */
-    //bzero(buffer, 256);
-    //n = read(sockfd, buffer, 255);
-
-    if (n < 0) {
-        perror("ERROR reading from socket");
-        exit(1);
-    }
-
-    printf("%s\n", buffer);
-    return arg;
+    delete arg;
 }
 
-int ConnectCommand::doCommand(vector<string>::iterator &vectorIt) {
+int ConnectCommand::execute(vector<string>::iterator &vectorIt) {
     int port;
     string ip;
     ip = *vectorIt;
@@ -92,6 +81,7 @@ int ConnectCommand::doCommand(vector<string>::iterator &vectorIt) {
     arg->ip = ip;
     arg->flag = isConnected;
     arg->controlString = this->flightString;
+    arg->exitServer = this->toExit;
     pthread_t pthread;
     pthread_create(&pthread, nullptr, connectClient, arg);
     pthread_detach(pthread);

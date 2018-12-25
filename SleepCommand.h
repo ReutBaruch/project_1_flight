@@ -5,7 +5,7 @@
 
 class SleepCommand: public Command {
 public:
-    virtual int doCommand(vector<string>::iterator &vectorIt);
+    virtual int execute(vector<string>::iterator &vectorIt);
 
 };
 

@@ -7,11 +7,15 @@
 
 class CommandMap {
     map<string, Command *> commandMAp;
+
 public:
-    CommandMap();
+    CommandMap(){}
     void addCommand(string key,Command* command);
     Command* getCommand(string key);
-    bool isKeyInMap(string key);
+    bool isInMap(string key);
+    ~CommandMap(){
+        delete this;
+    }
 };
 
 

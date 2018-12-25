@@ -2,51 +2,47 @@
 #include "IfCommand.h"
 #include "LoopCommand.h"
 
-ConditionParser::ConditionParser() {
-}
-
-ConditionParser::ConditionParser(CommandMap* commandMap,
-                                 SymbolTable *symbolMap) {
+ConditionParser::ConditionParser(CommandMap* commandMap, SymbolTable *symbolMap) {
     this->symbolTable = symbolMap;
     this->commandMap = commandMap;
-
 }
 
-int ConditionParser::doCommand(vector<string>::iterator &script) {
-    string ifOrWhile=(*script);
+int ConditionParser::execute(vector<string>::iterator &vectorIt) {
+    string whatLoop=(*vectorIt);
     string condition = "";
+
     Command *newCommand;
-    script++;
-    while ((*script) != "{") {
-        condition += (*script);
-        script++;
+    vectorIt++;
+
+    while ((*vectorIt) != "{") {
+        condition += (*vectorIt);
+        vectorIt++;
     }
     this->boolExpression = new BoolExpression(condition);
-    script++;
-    this->createCommand(script);
-    if (ifOrWhile == "if") {
-        newCommand = new IfCommand(this->boolExpression,this->expressionCommandList,this->symbolTable);
-    } else if (ifOrWhile == "while") {
-        newCommand = new LoopCommand(this->boolExpression,this->expressionCommandList,this->symbolTable);
-    }
-    newCommand->doCommand(script);
-    return 0;
+    vectorIt++;
+    this->createCommand(vectorIt);
 
+    if (whatLoop == "while") {
+        newCommand = new LoopCommand(this->boolExpression,this->expressionCommandList,this->symbolTable);
+    } else if (whatLoop == "if") {
+        newCommand = new IfCommand(this->boolExpression, this->expressionCommandList, this->symbolTable);
+    }
+    newCommand->execute(vectorIt);
+    return 0;
 }
 
 void ConditionParser::createCommand(vector<string>::iterator &vectorIt) {
     Command *newCommand;
     Expression *newExpression;
-    CommandExpression *commandExp;
+    CommandExpression* commandExp = NULL;
 
     while ((*vectorIt) != "}") {
         map<string, double> symbolsMap = this->symbolTable->getSymbols();
         if (this->symbolTable->getSymbols().count(*vectorIt)) {
-            Command *newCommand = this->commandMap->getCommand(
-                    "control");
+            Command *newCommand = this->commandMap->getCommand("control");
             commandExp = new CommandExpression(vectorIt, newCommand);
             this->expressionCommandList.push_back(commandExp);
-        } else if (this->commandMap->isKeyInMap(*vectorIt)) {
+        } else if (this->commandMap->isInMap(*vectorIt)) {
             commandExp = new CommandExpression(vectorIt,
                     this->commandMap->getCommand(*vectorIt));
             this->expressionCommandList.push_back(commandExp);

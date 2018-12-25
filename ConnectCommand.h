@@ -12,6 +12,7 @@
 #include "string"
 #include "CheckConnection.h"
 #include "StringFlightControls.h"
+#include "ExitServer.h"
 
 #ifndef PROJECT1_CONNECTCOMMAND_H
 #define PROJECT1_CONNECTCOMMAND_H
@@ -21,10 +22,12 @@ using namespace std;
 class ConnectCommand : public Command {
     CheckConnection* isConnected;
     StringFlightControls* flightString;
+    ExitServer* toExit;
 
 public:
-    ConnectCommand(CheckConnection* check, StringFlightControls* flightStr);
-    virtual int doCommand(vector<string>::iterator &vectorIt);
+    ConnectCommand(CheckConnection* check, StringFlightControls* flightStr, ExitServer* exit);
+    virtual int execute(vector<string>::iterator &vectorIt);
+    ~ConnectCommand(){}
 };
 
 #endif //PROJECT1_CONNECTCOMMAND_H

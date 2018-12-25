@@ -11,11 +11,15 @@ class BoolExpression  {
     string action;
 public:
 
-    BoolExpression(string stringCondition);
-    void createBoolExpression(string boolCondition);
+    BoolExpression(string stringCondition) {
+        this->createBoolExpression(stringCondition);
+    }
+
+    void createBoolExpression(string conditionToCheck);
     bool calculateBool(map <string,double> symbolMap);
 
-};
+    ~BoolExpression();
 
+};
 
 #endif //PROJECT1_BOOLEXPRESSION_H

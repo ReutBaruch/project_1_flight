@@ -8,17 +8,17 @@
 #define PROJECT1_MUL_H
 
 
-class Mul:public Expression,public BinaryExpression {
+class Mul:public Expression,public BineryExpression {
 public:
-    Mul(Expression *leftArgument, Expression *rightArgument) : BinaryExpression(leftArgument, rightArgument) {
+    Mul(Expression *leftArgument, Expression *rightArgument) : BineryExpression(leftArgument, rightArgument) {
     }
 
-    Mul(double leftArgument, double rightArgument) : BinaryExpression(new Num(leftArgument), new Num(rightArgument)) {
+    Mul(double leftArgument, double rightArgument) : BineryExpression(new Num(leftArgument), new Num(rightArgument)) {
     }
 
-    Mul(double leftArgument, Expression *rightArgument) : BinaryExpression(new Num(leftArgument), rightArgument) {
+    Mul(double leftArgument, Expression *rightArgument) : BineryExpression(new Num(leftArgument), rightArgument) {
     }
-    Mul(Expression *leftArgument, double rightArgument) : BinaryExpression(leftArgument, new Num(rightArgument)) {
+    Mul(Expression *leftArgument, double rightArgument) : BineryExpression(leftArgument, new Num(rightArgument)) {
     }
     virtual double calculate(map<string, double> &assignment) ;
 

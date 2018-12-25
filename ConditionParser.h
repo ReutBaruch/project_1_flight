@@ -10,19 +10,23 @@
 
 
 class ConditionParser : public Command {
-public:
     list<CommandExpression *> expressionCommandList;
     CommandMap* commandMap;
     BoolExpression* boolExpression;
     SymbolTable* symbolTable;
 
-
-    ConditionParser();
+public:
+    ConditionParser(){}
 
     ConditionParser(CommandMap* commandMap,SymbolTable* symbolMap);
 
-    virtual int doCommand(vector<string>::iterator &script);
+    virtual int execute(vector<string>::iterator &vectorIt);
     void createCommand(vector<string>::iterator &vectorIt);
+
+    ~ConditionParser(){
+        delete this->boolExpression;
+        delete this;
+    }
 
 };
 

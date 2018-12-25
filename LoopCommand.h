@@ -24,7 +24,7 @@ public:
         this->symbolTable = symbolTable;
     }
     void setCommandsMap(map <string,Command*> cMap);
-    virtual int doCommand(vector<string>:: iterator &script);
+    virtual int execute(vector<string>::iterator &vectorIt);
 };
 
 

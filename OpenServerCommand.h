@@ -12,6 +12,7 @@
 #include <vector>
 #include <pthread.h>
 #include "CheckConnection.h"
+#include "ExitServer.h"
 
 #ifndef PROJECT1_OPENSERVERCOMMAND_H
 #define PROJECT1_OPENSERVERCOMMAND_H
@@ -23,10 +24,11 @@ using namespace std;
 class OpenServerCommand : public Command {
     CheckConnection* isConnected;
     FlightValueMap* valueMap;
+    ExitServer* toExit;
 
 public:
-    OpenServerCommand(CheckConnection* check, FlightValueMap* vaules);
-    virtual int doCommand(vector<string>::iterator &vectorIt);
+    OpenServerCommand(CheckConnection* check, FlightValueMap* vaules, ExitServer* exit);
+    virtual int execute(vector<string>::iterator &vectorIt);
 };
 
 

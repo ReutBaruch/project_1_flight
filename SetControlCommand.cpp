@@ -1,6 +1,6 @@
 #include "SetControlCommand.h"
 
-int SetControlCommand::doCommand(vector<string>::iterator &vectorIt){
+int SetControlCommand::execute(vector<string>::iterator &vectorIt){
     string var = *vectorIt;
     vectorIt++;
     string value = *vectorIt;
