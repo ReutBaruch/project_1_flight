@@ -16,6 +16,6 @@ string PathMap::getBindMap(string key) const {
     }
 }
 */
-void PathMap::addBindToMap(string key, string value) {
+/*void PathMap::addToPathMap(string key, string value) {
     this->pathMap.insert(pair<string,string> (key,value));
-}
+}*/

@@ -2,21 +2,27 @@
 #define PROJECT1_STRINGFLIGHTCONTROLS_H
 
 #include <string>
+#include <list>
 
 using namespace std;
 
 class StringFlightControls {
-    string controlCommand;
+    list<string>controlCommand;
 public:
-    StringFlightControls(){
-        controlCommand = "";
-    }
+    StringFlightControls(){}
+
     void setControl(string s){
-        this->controlCommand = s;
+        this->controlCommand.push_back(s);
     }
 
     string getControl(){
-        return this->controlCommand;
+        string control = this->controlCommand.front();
+        this->controlCommand.pop_front();
+        return control;
+    }
+
+    bool isEmpty(){
+        return this->controlCommand.empty();
     }
 
 

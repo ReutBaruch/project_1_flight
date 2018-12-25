@@ -2,51 +2,47 @@
 #include "SetControlCommand.h"
 #include "CommandExpression.h"
 #include "SetControlCommand.h"
+#include "SleepCommand.h"
+#include "PrintCommand.h"
 
 parser::parser(){
-    this->bindMap = new PathMap();
-    this->valueMap = new FlightValueMap();
-    this->connection = new CheckConnection();
     this->stringControl = new StringFlightControls();
+    this->connection = new CheckConnection();
+    this->valueMap = new FlightValueMap();
+    this->bindMap = new PathMap();
     this->symbols = new SymbolTable(this->valueMap, this->bindMap);
-    this->commands.insert(pair<string, Command*>("openDataServer", new OpenServerCommand(this->connection,
-            this->valueMap)));
-    this->commands.insert(pair<string, Command*>("connect", new ConnectCommand(this->connection,
-                                                                               this->stringControl)));
-    this->commands.insert(pair<string, Command*>("var", new VarCommand(this->symbols)));
-    this->commands.insert(pair<string, Command*>("control", new SetControlCommand(this->stringControl,
-                                                                                  this->symbols)));
+    this->commands=new CommandMap();
+    this->commands->addCommand("openDateServer", new OpenServerCommand(this->connection, this->valueMap ));
+    this->commands->addCommand("connect", new ConnectCommand(this->connection,this->stringControl));
+    this->commands->addCommand("var", new VarCommand(this->symbols));
+    this->commands->addCommand("control", new SetControlCommand(
+            this->stringControl, this->symbols));
+    this->commands->addCommand("if", new ConditionParser(this->commands,this->symbols));
+    this->commands->addCommand("while", new ConditionParser(this->commands,this->symbols));
+    this->commands->addCommand("print", new PrintCommand(this->symbols));
+    this->commands->addCommand("sleep", new SleepCommand());
 }
 
-void parser::runParser(vector<string> v){
-    vector<string>:: iterator vectorIt;
+void parser::runParser(vector<string> v) {
+    vector<string>::iterator vectorIt;
+    Expression *commandExpression;
+    Command *newCommand;
     for (vectorIt = v.begin(); vectorIt != v.end(); vectorIt++) {
-        if (this->commands.count(*vectorIt)) {
-            Command *com = this->commands.find(*vectorIt)->second;
-            vectorIt++;
-            com->doCommand(vectorIt);
-        }else if(this->symbols->getSymbols().count(*vectorIt)){
-            CommandExpression* commmandEX = new CommandExpression(vectorIt,new SetControlCommand(this->stringControl,
-                    this->symbols));
-            map<string, double> mapSymbol = this->symbols->getSymbols();
-            vectorIt += commmandEX->calculate(mapSymbol);
-        } else if (*vectorIt == "while"){
-            //TODO
-        } else if (*vectorIt == "if"){
-            //TODO
-        } else if (*vectorIt == "print"){
-            //TODO
-        } else if (*vectorIt == "sleep"){
-            //TODO
-        } else {
-            VarCommand* var = new VarCommand(this->symbols);
-            var->doCommand(vectorIt);
+        map<string, double> symbolsMap = this->symbols->getSymbols();
+        if (this->symbols->getSymbols().count(*vectorIt)){
+            newCommand = this->commands->getCommand("control");
+            commandExpression = new CommandExpression(vectorIt, newCommand);
+            vectorIt += commandExpression->calculate(symbolsMap);
+        } else if (((*vectorIt) == "if") || ((*vectorIt) == "while")) {
+            newCommand = this->commands->getCommand(*vectorIt);
+            newCommand->doCommand(vectorIt);
+        } else if (this->commands->isKeyInMap(*vectorIt)) {
+            commandExpression = new CommandExpression(vectorIt, this->commands->getCommand(*vectorIt));
+            vectorIt += commandExpression->calculate(symbolsMap);
         }
-       // vectorIt++;
     }
-    while (true){
-
+    while (true) {
+        int x;
     }
-
-    //cout << "work parser" << endl;
 }
+

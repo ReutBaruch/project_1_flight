@@ -57,19 +57,19 @@ void* openSocket(void* args) {
     arg->flag->setConnect(true);
 
     /* If connection is established then start communicating */
-    while (true) {
-        bzero(buffer, 256);
+    while(true) {
+        bzero(buffer,256);
         n = read(newsockfd, buffer, 255);
+        string updateMap = buffer;
+        arg->valuesMap->updateMap(updateMap);
+        printf("open server: %s\n" ,buffer);
         if (n < 0) {
             perror("ERROR reading from socket");
             exit(1);
+
         }
-        string s = buffer;
-        arg->valuesMap->updateMap(s);
-        printf("%s\n", buffer);
         sleep(arg->listenTime);
     }
-
 
 
     /* Write a response to the client */

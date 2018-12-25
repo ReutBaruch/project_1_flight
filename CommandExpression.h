@@ -3,7 +3,7 @@
 
 #include "Expression.h"
 #include "Command.h"
-#include "createExpression.h"
+#include "CreateExpression.h"
 
 class CommandExpression: public Expression {
     Command* command;
@@ -17,7 +17,7 @@ public:
 
     double calculate(map<string, double> &assignment);
 
-    double calculate() {}
+    double calculate();
 };
 
 

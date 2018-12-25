@@ -2,7 +2,7 @@
 
 
 void SymbolTable::addPairSymbol(string key, string value) {
-    this->bindMap->addBindToMap(key, value);
+    this->bindMap->addToPathMap(key, value);
     if (this->flightValues->getFlightVauleMap().count(key)) {
         this->symbols.insert(pair<string, double>(key, this->flightValues->getFlightVauleMap()
         .find(value)->second));

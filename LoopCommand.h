@@ -1,15 +1,31 @@
-#ifndef PROJECT1_LOOPCOMMAND_H
-#define PROJECT1_LOOPCOMMAND_H
+#include "Command.h"
+#include "map"
+#include "CommandExpression.h"
+#include <list>
+#include "BoolExpression.h"
+#include "SymbolTable.h"
 
-#include "conditionParser.h"
 
-class LoopCommand: public conditionParser {
+#ifndef PROJECTNUM1_LOOPCOMMAND_H
+#define PROJECTNUM1_LOOPCOMMAND_H
+
+
+class LoopCommand : public Command  {
+    BoolExpression* boolExpression;
+    list<CommandExpression*> commandExpressions;
+    SymbolTable* symbolTable;
 
 public:
-    LoopCommand(vector<string>::iterator &vectorIt);
-    virtual int doCommand(vector<string>::iterator &vectorIt);
-
+    LoopCommand(BoolExpression *boolExpres,
+                             list<CommandExpression *> list,
+                             SymbolTable *symbolTable) {
+        this->boolExpression = boolExpres;
+        this->commandExpressions = list;
+        this->symbolTable = symbolTable;
+    }
+    void setCommandsMap(map <string,Command*> cMap);
+    virtual int doCommand(vector<string>:: iterator &script);
 };
 
 
-#endif //PROJECT1_LOOPCOMMAND_H
+#endif //PROJECTNUM1_LOOPCOMMAND_H

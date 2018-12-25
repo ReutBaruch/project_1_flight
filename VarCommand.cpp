@@ -2,20 +2,21 @@
 
 
 int VarCommand::doCommand(vector<string>::iterator &vectorIt){
-    //vectorIt++;
-    string temp = *vectorIt;
-    vectorIt +=2;
-    if (*vectorIt == "bind"){
+    int countSteps=0;
+    string varName = (*vectorIt);
+    vectorIt += 2;
+    countSteps+=2;
+    if ((*vectorIt) == "bind") {
         vectorIt++;
-        string path = (*vectorIt).substr(1, (*vectorIt).length() -2);
-        this->symbols->addPairSymbol(temp, path);
-
-    } else {
-        if(this->symbols->getSymbols().count(*vectorIt)){
-            this->symbols->setSymbol(temp, this->symbols->getSymbols().find(*vectorIt)->second);
-        }
+        countSteps++;
+        string temp = (*vectorIt);
+        temp = temp.substr(1, (temp.length()) -2);
+        this->symbols->addPairSymbol(varName, temp);
+    } else {  // not bind
+        double num = this->symbols->getValue((*vectorIt));
+        this->symbols->addSymbol(varName, num);
     }
-    //double num = atof((*vectorIt).c_str());
-    //this->symbols->setSymbol(temp, num);
     vectorIt++;
+    countSteps++;
+    return countSteps;
 }

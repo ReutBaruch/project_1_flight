@@ -12,12 +12,15 @@
 #include "FlightValueMap.h"
 #include "PathMap.h"
 #include "StringFlightControls.h"
+#include "CommandMap.h"
+#include "ConditionParser.h"
+#include "SleepCommand.h"
 
 using namespace std;
 
 
 class parser {
-    std::map<string, Command*> commands;
+    CommandMap* commands;
     SymbolTable* symbols;
     CheckConnection* connection;
     FlightValueMap* valueMap;

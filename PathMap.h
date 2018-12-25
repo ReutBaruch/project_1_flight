@@ -10,7 +10,9 @@ class PathMap {
     map<string,string> pathMap;
 public:
     PathMap(){}
-    void addBindToMap(string key, string value);
+    void addToPathMap(string key, string value) {
+        this->pathMap.insert(pair<string,string> (key,value));
+    }
     //string getBindMap(string key) const;
     //bool isKeyInMap(string key) const;
     map<string,string> getBindMap(){

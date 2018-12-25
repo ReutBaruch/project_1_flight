@@ -1,11 +1,17 @@
 #include "LoopCommand.h"
 
 
-LoopCommand::LoopCommand(vector<string>::iterator &vectorIt){
+int LoopCommand::doCommand(vector<string>::iterator &script) {
+    list<CommandExpression*> tempList;
+    while (this->boolExpression->calculateBool(
+            this->symbolTable->getSymbols())) {
+        tempList =this->commandExpressions;
+        list<CommandExpression *>::iterator itr;
+        for (itr = tempList.begin();
+             itr !=tempList.end(); itr++) {
+            map<string, double> symbolMap = this->symbolTable->getSymbols();
+            (*itr)->calculate(symbolMap);
+        }
 
-}
-
-int LoopCommand::doCommand(vector<string>::iterator &vectorIt){
-    return 0;
-
+    }
 }

@@ -55,18 +55,18 @@ void* connectClient(void* args) {
 
     while (true) {
         bzero(buffer, 256);
-        if(arg->controlString->getControl() != ""){
+        while(!arg->controlString->isEmpty()){
             strcpy(buffer, arg->controlString->getControl().c_str());
-            printf("%s\n", buffer);
             n = write(sockfd, buffer, 255);
-           arg->controlString->setControl("");
+            if (n < 0) {
+                perror("ERROR writing to socket");
+                exit(1);
+            }
+            //string initilize = "";
+            arg->controlString->setControl("");
         }
     }
 
-    if (n < 0) {
-        perror("ERROR writing to socket");
-        exit(1);
-    }
 
     /* Now read server response */
     //bzero(buffer, 256);
@@ -78,7 +78,9 @@ void* connectClient(void* args) {
     }
 
     printf("%s\n", buffer);
+    return arg;
 }
+
 int ConnectCommand::doCommand(vector<string>::iterator &vectorIt) {
     int port;
     string ip;
